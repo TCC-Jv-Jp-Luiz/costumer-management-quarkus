@@ -3,9 +3,12 @@ package br.edu.unipe.domain.customer;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import br.edu.unipe.domain.address.Address;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -39,6 +42,18 @@ public class CustomerService {
             throw new NotFoundException("Customer not found");
         }
         return CustomerOutputDTO.from(customer);
+    }
+
+    public CustomerPaginationResponse listCustomers(int limit, int offset) {
+        PanacheQuery<PanacheEntityBase> query = Customer.findAll();
+        List<Customer> customers = query.range(offset, offset + limit - 1).list();
+
+        List<CustomerOutputDTO> data = customers.stream()
+                .map(CustomerOutputDTO::from)
+                .toList();
+
+        long totalCount = Customer.count();
+        return new CustomerPaginationResponse(limit, offset, totalCount, data);
     }
 
 }

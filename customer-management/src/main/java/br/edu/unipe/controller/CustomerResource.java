@@ -1,5 +1,6 @@
 package br.edu.unipe.controller;
 
+import br.edu.unipe.domain.customer.CustomerPaginationResponse;
 import br.edu.unipe.domain.customer.CustomerService;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
@@ -31,5 +32,12 @@ public class CustomerResource {
     public Response getCustomer(@PathParam("publicId") UUID publicId) {
         CustomerOutputDTO output = customerService.getCustomer(publicId);
         return Response.ok(output).build();
+    }
+
+    @GET
+    public Response listCustomers(@QueryParam("limit") @DefaultValue("10") int limit,
+                                  @QueryParam("offset") @DefaultValue("0") int offset) {
+        CustomerPaginationResponse response = customerService.listCustomers(limit, offset);
+        return Response.ok(response).build();
     }
 }
