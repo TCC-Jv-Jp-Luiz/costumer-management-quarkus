@@ -11,40 +11,76 @@ import jakarta.persistence.*;
 @Table(name = "address")
 public class Address extends PanacheEntityBase {
     @Id
-    @GeneratedValue
-    public UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public String street;
-    public String complement;
-    public String city;
-    public String state;
-    public String postalCode;
+    private UUID publicId;
 
+    private String street;
+    private String complement;
+    private String city;
+
+    @Enumerated(EnumType.STRING)
+    private State state;
+
+    private String postalCode;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audit_log_info_id", referencedColumnName = "id")
-    public AuditLogInfo auditLogInfo;
-
-    public AuditLogInfo getAuditLogInfo() {
-        return auditLogInfo;
-    }
-
-    public void setAuditInfo(AuditLogInfo auditLogInfo) {
-        this.auditLogInfo = auditLogInfo;
-    }
+    private AuditLogInfo auditLogInfo;
 
     @PrePersist
-    public void onCreate() {
+    void generatePublicId() {
+        if (this.publicId == null) {
+            this.publicId = UUID.randomUUID();
+        }
         if (this.auditLogInfo == null) {
             this.auditLogInfo = new AuditLogInfo();
         }
-        this.auditLogInfo.createdAt = LocalDateTime.now();
-        this.auditLogInfo.updatedAt = LocalDateTime.now();
+        this.auditLogInfo.setCreatedAt(LocalDateTime.now());
+        this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
     }
 
     @PreUpdate
-    public void onUpdate() {
-        this.auditLogInfo.updatedAt = LocalDateTime.now();
+    void onUpdate() {
+        this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
     }
-    
+
+    // Getters e Setters
+    public Long getId() { return id; }
+    public UUID getPublicId() { return publicId; }
+    public String getStreet() { return street; }
+    public void setStreet(String street) { this.street = street; }
+    public String getComplement() {
+        return complement;
+    }
+
+    public void setComplement(String complement) {
+        this.complement = complement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
 }
