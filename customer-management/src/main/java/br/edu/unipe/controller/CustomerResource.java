@@ -1,7 +1,7 @@
 package br.edu.unipe.controller;
 
 import br.edu.unipe.domain.customer.CustomerPaginationResponse;
-import br.edu.unipe.domain.customer.CustomerService;
+import br.edu.unipe.service.CustomerService;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import jakarta.inject.Inject;
@@ -39,5 +39,19 @@ public class CustomerResource {
                                   @QueryParam("offset") @DefaultValue("0") int offset) {
         CustomerPaginationResponse response = customerService.listCustomers(limit, offset);
         return Response.ok(response).build();
+    }
+
+    @PUT
+    @Path("/{publicId}")
+    public Response updateCustomer(@PathParam("publicId") UUID publicId, @Valid CustomerInputDTO customerInputDTO) {
+        CustomerOutputDTO customerOutputDTO = customerService.updateCustomer(publicId, customerInputDTO);
+        return Response.ok(customerOutputDTO).build();
+    }
+
+    @DELETE
+    @Path("/{publicId}")
+    public Response deleteCustomer(@PathParam("publicId") UUID publicId) {
+        customerService.deleteCustomer(publicId);
+        return Response.noContent().build();
     }
 }

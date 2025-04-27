@@ -1,11 +1,15 @@
-package br.edu.unipe.domain.customer;
+package br.edu.unipe.service;
 
+import br.edu.unipe.domain.address.dto.AddressInputDTO;
+import br.edu.unipe.domain.customer.Customer;
+import br.edu.unipe.domain.customer.CustomerPaginationResponse;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import br.edu.unipe.domain.address.Address;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -14,6 +18,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class CustomerService {
 
+    @Transactional
     public CustomerOutputDTO createCustomer(CustomerInputDTO input) {
         Customer customer = new Customer();
         customer.setName(input.getName());
@@ -56,4 +61,41 @@ public class CustomerService {
         return new CustomerPaginationResponse(limit, offset, totalCount, data);
     }
 
+    @Transactional
+    public CustomerOutputDTO updateCustomer(UUID publicId, CustomerInputDTO customerInputDTO) {
+        Customer customer = Customer.find("publicId", publicId).firstResult();
+
+        if (customer == null) {
+            throw new NotFoundException("Customer not found");
+        }
+
+        customer.setName(customerInputDTO.getName());
+        customer.setCellPhone(customerInputDTO.getCellPhone());
+        customer.setEmail(customerInputDTO.getEmail());
+        customer.setCpf(customerInputDTO.getCpf());
+        customer.setBirthDate(customerInputDTO.getBirthDate());
+
+        Address address = customer.getAddress();
+        AddressInputDTO addressInputDTO = customerInputDTO.getAddress();
+        address.setStreet(addressInputDTO.getStreet());
+        address.setComplement(addressInputDTO.getComplement());
+        address.setCity(addressInputDTO.getCity());
+        address.setState(addressInputDTO.getState());
+        address.setPostalCode(addressInputDTO.getPostalCode());
+
+        customer.persistAndFlush();
+
+        return CustomerOutputDTO.from(customer);
+    }
+
+    @Transactional
+    public void deleteCustomer(UUID publicId) {
+        Customer customer = Customer.find("publicId", publicId).firstResult();
+
+        if (customer == null) {
+            throw new NotFoundException("Customer not found");
+        }
+
+        customer.delete();
+    }
 }
