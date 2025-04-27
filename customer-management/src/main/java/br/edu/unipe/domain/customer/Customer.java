@@ -18,9 +18,15 @@ public class Customer extends PanacheEntityBase {
     private UUID publicId;
 
     private String name;
+    @Column(unique = true)
     private String cellPhone;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
     private String cpf;
+
     private LocalDate birthDate;
 
     @OneToOne(cascade = CascadeType.ALL)
