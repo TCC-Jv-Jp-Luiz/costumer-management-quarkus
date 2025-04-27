@@ -47,4 +47,11 @@ public class CustomerResource {
         CustomerOutputDTO customerOutputDTO = customerService.updateCustomer(publicId, customerInputDTO);
         return Response.ok(customerOutputDTO).build();
     }
+
+    @DELETE
+    @Path("/{publicId}")
+    public Response deleteCustomer(@PathParam("publicId") UUID publicId) {
+        customerService.deleteCustomer(publicId);
+        return Response.noContent().build();
+    }
 }
