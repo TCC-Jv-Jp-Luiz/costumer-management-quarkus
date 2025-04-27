@@ -3,7 +3,7 @@ package br.edu.unipe.domain.customer.dto;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import br.edu.unipe.domain.address.Address;
+import br.edu.unipe.domain.address.dto.AddressOutputDTO;
 import br.edu.unipe.domain.auditlogInfo.AuditLogInfo;
 import br.edu.unipe.domain.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +15,7 @@ public class CustomerOutputDTO {
     public String email;
     public String cpf;
     public LocalDate birthDate;
-    public Address address;
+    public AddressOutputDTO address;
     @JsonProperty("auditInfo")
     public AuditLogInfo auditLogInfo;
 
@@ -27,7 +27,7 @@ public class CustomerOutputDTO {
         dto.email = customer.getEmail();
         dto.cpf = customer.getCpf();
         dto.birthDate = customer.getBirthDate();
-        dto.address = customer.getAddress();
+        dto.address = AddressOutputDTO.from(customer.getAddress());
         dto.auditLogInfo = customer.getAuditLogInfo();
         return dto;
     }
@@ -38,6 +38,6 @@ public class CustomerOutputDTO {
     public String getEmail() { return email; }
     public String getCpf() { return cpf; }
     public LocalDate getBirthDate() { return birthDate; }
-    public Address getAddress() { return address; }
+    public AddressOutputDTO getAddress() { return address; }
     public AuditLogInfo getAuditInfo() { return auditLogInfo; }
 }
