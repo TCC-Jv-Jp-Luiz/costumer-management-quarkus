@@ -30,7 +30,7 @@ public class Address extends PanacheEntityBase {
     private AuditLogInfo auditLogInfo;
 
     @PrePersist
-    void generatePublicId() {
+    void initializeFields() {
         if (this.publicId == null) {
             this.publicId = UUID.randomUUID();
         }
