@@ -88,4 +88,14 @@ public class CustomerService {
         return CustomerOutputDTO.from(customer);
     }
 
+    @Transactional
+    public void deleteCustomer(UUID publicId) {
+        Customer customer = Customer.find("publicId", publicId).firstResult();
+
+        if (customer == null) {
+            throw new NotFoundException("Customer not found");
+        }
+
+        customer.delete();
+    }
 }
