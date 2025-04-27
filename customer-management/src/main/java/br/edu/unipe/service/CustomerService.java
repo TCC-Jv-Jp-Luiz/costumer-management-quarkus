@@ -96,6 +96,33 @@ public class CustomerService {
             throw new NotFoundException("Customer not found");
         }
 
+        Customer cpfCustomer = Customer.find("cpf", customerInputDTO.getCpf()).firstResult();
+        if (cpfCustomer != null && !cpfCustomer.getId().equals(customer.getId())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "CPF already registered."))
+                            .build()
+            );
+        }
+
+        Customer emailCustomer = Customer.find("email", customerInputDTO.getEmail()).firstResult();
+        if (emailCustomer != null && !emailCustomer.getId().equals(customer.getId())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "Email already registered."))
+                            .build()
+            );
+        }
+
+        Customer cellPhoneCustomer = Customer.find("cellPhone", customerInputDTO.getCellPhone()).firstResult();
+        if (cellPhoneCustomer != null && !cellPhoneCustomer.getId().equals(customer.getId())) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "CellPhone already registered."))
+                            .build()
+            );
+        }
+
         customer.setName(customerInputDTO.getName());
         customer.setCellPhone(customerInputDTO.getCellPhone());
         customer.setEmail(customerInputDTO.getEmail());
