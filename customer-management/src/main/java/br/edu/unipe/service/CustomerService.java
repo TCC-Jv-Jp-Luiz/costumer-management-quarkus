@@ -15,6 +15,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -23,15 +24,27 @@ public class CustomerService {
     @Transactional
     public CustomerOutputDTO createCustomer(CustomerInputDTO input) {
         if (Customer.existsByCpf(input.getCpf())) {
-            throw new WebApplicationException("CPF already registered.", Response.Status.CONFLICT);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "CPF already registered."))
+                            .build()
+            );
         }
 
         if (Customer.existsByEmail(input.getEmail())) {
-            throw new WebApplicationException("Email already registered.", Response.Status.CONFLICT);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "Email already registered."))
+                            .build()
+            );
         }
 
         if (Customer.existsByCellPhone(input.getCellPhone())) {
-            throw new WebApplicationException("Telefone already registered.", Response.Status.CONFLICT);
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("message", "CellPhone already registered."))
+                            .build()
+            );
         }
 
         Customer customer = new Customer();
