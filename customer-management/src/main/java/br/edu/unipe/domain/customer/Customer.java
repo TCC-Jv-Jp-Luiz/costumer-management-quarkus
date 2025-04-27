@@ -37,6 +37,7 @@ public class Customer extends PanacheEntityBase {
     @JoinColumn(name = "audit_log_info_id", referencedColumnName = "id")
     private AuditLogInfo auditLogInfo;
 
+
     @PrePersist
     void initializeFields() {
         if (this.publicId == null) {
