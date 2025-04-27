@@ -1,11 +1,15 @@
-package br.edu.unipe.domain.customer;
+package br.edu.unipe.service;
 
+import br.edu.unipe.domain.address.dto.AddressInputDTO;
+import br.edu.unipe.domain.customer.Customer;
+import br.edu.unipe.domain.customer.CustomerPaginationResponse;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import br.edu.unipe.domain.address.Address;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;

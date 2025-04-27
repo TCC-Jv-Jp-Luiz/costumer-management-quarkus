@@ -1,7 +1,7 @@
 package br.edu.unipe.controller;
 
 import br.edu.unipe.domain.customer.CustomerPaginationResponse;
-import br.edu.unipe.domain.customer.CustomerService;
+import br.edu.unipe.service.CustomerService;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import jakarta.inject.Inject;
