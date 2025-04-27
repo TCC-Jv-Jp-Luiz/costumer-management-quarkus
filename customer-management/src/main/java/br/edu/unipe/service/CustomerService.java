@@ -11,6 +11,8 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +22,18 @@ public class CustomerService {
 
     @Transactional
     public CustomerOutputDTO createCustomer(CustomerInputDTO input) {
+        if (Customer.existsByCpf(input.getCpf())) {
+            throw new WebApplicationException("CPF already registered.", Response.Status.CONFLICT);
+        }
+
+        if (Customer.existsByEmail(input.getEmail())) {
+            throw new WebApplicationException("Email already registered.", Response.Status.CONFLICT);
+        }
+
+        if (Customer.existsByCellPhone(input.getCellPhone())) {
+            throw new WebApplicationException("Telefone already registered.", Response.Status.CONFLICT);
+        }
+
         Customer customer = new Customer();
         customer.setName(input.getName());
         customer.setCellPhone(input.getCellPhone());

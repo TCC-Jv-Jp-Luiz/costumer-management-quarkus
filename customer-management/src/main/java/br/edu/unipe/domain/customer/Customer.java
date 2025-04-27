@@ -49,6 +49,19 @@ public class Customer extends PanacheEntityBase {
         this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
     }
 
+    public static boolean existsByCpf(String cpf) {
+        return find("cpf", cpf).firstResultOptional().isPresent();
+    }
+
+    public static boolean existsByEmail(String email) {
+        return find("email", email).firstResultOptional().isPresent();
+    }
+
+    public static boolean existsByCellPhone(String cellPhone) {
+        return find("cellPhone", cellPhone).firstResultOptional().isPresent();
+    }
+
+
     @PreUpdate
     void onUpdate() {
         this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
