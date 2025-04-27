@@ -18,6 +18,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class CustomerService {
 
+    @Transactional
     public CustomerOutputDTO createCustomer(CustomerInputDTO input) {
         Customer customer = new Customer();
         customer.setName(input.getName());
@@ -58,6 +59,33 @@ public class CustomerService {
 
         long totalCount = Customer.count();
         return new CustomerPaginationResponse(limit, offset, totalCount, data);
+    }
+
+    @Transactional
+    public CustomerOutputDTO updateCustomer(UUID publicId, CustomerInputDTO customerInputDTO) {
+        Customer customer = Customer.find("publicId", publicId).firstResult();
+
+        if (customer == null) {
+            throw new NotFoundException("Customer not found");
+        }
+
+        customer.setName(customerInputDTO.getName());
+        customer.setCellPhone(customerInputDTO.getCellPhone());
+        customer.setEmail(customerInputDTO.getEmail());
+        customer.setCpf(customerInputDTO.getCpf());
+        customer.setBirthDate(customerInputDTO.getBirthDate());
+
+        Address address = customer.getAddress();
+        AddressInputDTO addressInputDTO = customerInputDTO.getAddress();
+        address.setStreet(addressInputDTO.getStreet());
+        address.setComplement(addressInputDTO.getComplement());
+        address.setCity(addressInputDTO.getCity());
+        address.setState(addressInputDTO.getState());
+        address.setPostalCode(addressInputDTO.getPostalCode());
+
+        customer.persistAndFlush();
+
+        return CustomerOutputDTO.from(customer);
     }
 
 }

@@ -40,4 +40,11 @@ public class CustomerResource {
         CustomerPaginationResponse response = customerService.listCustomers(limit, offset);
         return Response.ok(response).build();
     }
+
+    @PUT
+    @Path("/{publicId}")
+    public Response updateCustomer(@PathParam("publicId") UUID publicId, @Valid CustomerInputDTO customerInputDTO) {
+        CustomerOutputDTO customerOutputDTO = customerService.updateCustomer(publicId, customerInputDTO);
+        return Response.ok(customerOutputDTO).build();
+    }
 }
