@@ -1,6 +1,7 @@
 package br.edu.unipe.controller;
 
 import br.edu.unipe.domain.customer.CustomerPaginationResponse;
+import br.edu.unipe.domain.shared.BusinessException;
 import br.edu.unipe.service.CustomerService;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Path("/customers")
@@ -23,8 +25,14 @@ public class CustomerResource {
     @POST
     @Transactional
     public Response createCustomer(@Valid CustomerInputDTO input) {
-        CustomerOutputDTO output = customerService.createCustomer(input);
-        return Response.status(Response.Status.CREATED).entity(output).build();
+        try {
+            CustomerOutputDTO output = customerService.createCustomer(input);
+            return Response.status(Response.Status.CREATED).entity(output).build();
+        } catch (BusinessException ex) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(Map.of("message", ex.getMessage()))
+                    .build();
+        }
     }
 
     @GET

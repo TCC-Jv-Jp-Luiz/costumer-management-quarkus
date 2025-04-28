@@ -6,6 +6,7 @@ import br.edu.unipe.domain.customer.CustomerPaginationResponse;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import br.edu.unipe.domain.address.Address;
+import br.edu.unipe.domain.shared.BusinessException;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,29 +24,7 @@ public class CustomerService {
 
     @Transactional
     public CustomerOutputDTO createCustomer(CustomerInputDTO input) {
-        if (Customer.existsByCpf(input.getCpf())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "CPF already registered."))
-                            .build()
-            );
-        }
-
-        if (Customer.existsByEmail(input.getEmail())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "Email already registered."))
-                            .build()
-            );
-        }
-
-        if (Customer.existsByCellPhone(input.getCellPhone())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "CellPhone already registered."))
-                            .build()
-            );
-        }
+        validateUniqueFields(null, input);
 
         Customer customer = new Customer();
         customer.setName(input.getName());
@@ -96,32 +75,7 @@ public class CustomerService {
             throw new NotFoundException("Customer not found");
         }
 
-        Customer cpfCustomer = Customer.find("cpf", customerInputDTO.getCpf()).firstResult();
-        if (cpfCustomer != null && !cpfCustomer.getId().equals(customer.getId())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "CPF already registered."))
-                            .build()
-            );
-        }
-
-        Customer emailCustomer = Customer.find("email", customerInputDTO.getEmail()).firstResult();
-        if (emailCustomer != null && !emailCustomer.getId().equals(customer.getId())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "Email already registered."))
-                            .build()
-            );
-        }
-
-        Customer cellPhoneCustomer = Customer.find("cellPhone", customerInputDTO.getCellPhone()).firstResult();
-        if (cellPhoneCustomer != null && !cellPhoneCustomer.getId().equals(customer.getId())) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("message", "CellPhone already registered."))
-                            .build()
-            );
-        }
+        validateUniqueFields(customer, customerInputDTO);
 
         customer.setName(customerInputDTO.getName());
         customer.setCellPhone(customerInputDTO.getCellPhone());
@@ -152,4 +106,22 @@ public class CustomerService {
 
         customer.delete();
     }
+
+    private void validateUniqueFields(Customer currentCustomer, CustomerInputDTO input) {
+        Customer cpfCustomer = Customer.find("cpf", input.getCpf()).firstResult();
+        if (cpfCustomer != null && (currentCustomer == null || !cpfCustomer.getId().equals(currentCustomer.getId()))) {
+            throw new BusinessException("CPF already registered.");
+        }
+
+        Customer emailCustomer = Customer.find("email", input.getEmail()).firstResult();
+        if (emailCustomer != null && (currentCustomer == null || !emailCustomer.getId().equals(currentCustomer.getId()))) {
+            throw new BusinessException("Email already registered.");
+        }
+
+        Customer cellPhoneCustomer = Customer.find("cellPhone", input.getCellPhone()).firstResult();
+        if (cellPhoneCustomer != null && (currentCustomer == null || !cellPhoneCustomer.getId().equals(currentCustomer.getId()))) {
+            throw new BusinessException("CellPhone already registered.");
+        }
+    }
+
 }
