@@ -7,6 +7,9 @@ import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 import br.edu.unipe.domain.address.Address;
 import br.edu.unipe.domain.shared.BusinessException;
+import br.edu.unipe.domain.shared.DuplicateCellPhoneException;
+import br.edu.unipe.domain.shared.DuplicateCpfException;
+import br.edu.unipe.domain.shared.DuplicateEmailException;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -110,18 +113,17 @@ public class CustomerService {
     private void validateUniqueFields(Customer currentCustomer, CustomerInputDTO input) {
         Customer cpfCustomer = Customer.find("cpf", input.getCpf()).firstResult();
         if (cpfCustomer != null && (currentCustomer == null || !cpfCustomer.getId().equals(currentCustomer.getId()))) {
-            throw new BusinessException("CPF already registered.");
+            throw new DuplicateCpfException();
         }
 
         Customer emailCustomer = Customer.find("email", input.getEmail()).firstResult();
         if (emailCustomer != null && (currentCustomer == null || !emailCustomer.getId().equals(currentCustomer.getId()))) {
-            throw new BusinessException("Email already registered.");
+            throw new DuplicateEmailException();
         }
 
         Customer cellPhoneCustomer = Customer.find("cellPhone", input.getCellPhone()).firstResult();
         if (cellPhoneCustomer != null && (currentCustomer == null || !cellPhoneCustomer.getId().equals(currentCustomer.getId()))) {
-            throw new BusinessException("CellPhone already registered.");
+            throw new DuplicateCellPhoneException();
         }
     }
-
 }
