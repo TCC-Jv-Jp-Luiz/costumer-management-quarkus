@@ -52,8 +52,14 @@ public class CustomerResource {
     @PUT
     @Path("/{publicId}")
     public Response updateCustomer(@PathParam("publicId") UUID publicId, @Valid CustomerInputDTO customerInputDTO) {
-        CustomerOutputDTO customerOutputDTO = customerService.updateCustomer(publicId, customerInputDTO);
-        return Response.ok(customerOutputDTO).build();
+        try {
+            CustomerOutputDTO output = customerService.updateCustomer(publicId, customerInputDTO);
+            return Response.ok(output).build();
+        } catch (BusinessException ex) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(Map.of("message", ex.getMessage()))
+                    .build();
+        }
     }
 
     @DELETE
