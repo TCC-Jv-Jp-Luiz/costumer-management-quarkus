@@ -50,7 +50,6 @@ public class Customer extends PanacheEntityBase {
         this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
     }
 
-
     @PreUpdate
     void onUpdate() {
         this.auditLogInfo.setUpdatedAt(LocalDateTime.now());
