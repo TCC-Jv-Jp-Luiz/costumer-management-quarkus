@@ -2,9 +2,7 @@ package br.edu.unipe.controller;
 
 import br.edu.unipe.domain.customer.CustomerPaginationResponse;
 import br.edu.unipe.domain.shared.BusinessException;
-import br.edu.unipe.domain.shared.DuplicateCellPhoneException;
-import br.edu.unipe.domain.shared.DuplicateCpfException;
-import br.edu.unipe.domain.shared.DuplicateEmailException;
+import br.edu.unipe.domain.shared.DuplicateAttributeException;
 import br.edu.unipe.service.CustomerService;
 import br.edu.unipe.domain.customer.dto.CustomerInputDTO;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
@@ -31,7 +29,7 @@ public class CustomerResource {
         try {
             CustomerOutputDTO output = customerService.createCustomer(input);
             return Response.status(Response.Status.CREATED).entity(output).build();
-        } catch (DuplicateCpfException | DuplicateEmailException | DuplicateCellPhoneException ex) {
+        } catch (DuplicateAttributeException ex) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(Map.of("message", ex.getMessage()))
                     .build();
@@ -62,8 +60,12 @@ public class CustomerResource {
         try {
             CustomerOutputDTO output = customerService.updateCustomer(publicId, customerInputDTO);
             return Response.ok(output).build();
-        } catch (BusinessException ex) {
+        } catch (DuplicateAttributeException ex) {
             return Response.status(Response.Status.CONFLICT)
+                    .entity(Map.of("message", ex.getMessage()))
+                    .build();
+        } catch (BusinessException ex) {
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Map.of("message", ex.getMessage()))
                     .build();
         }
