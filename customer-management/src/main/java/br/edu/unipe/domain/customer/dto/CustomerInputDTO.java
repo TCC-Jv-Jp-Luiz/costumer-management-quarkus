@@ -9,7 +9,7 @@ public class CustomerInputDTO {
     @NotBlank(message = "Name is required")
     private String name;
 
-    @Pattern(regexp = "^\\+\\d{1,3} \\d{2} \\d{4,5}-\\d{4}$", message = "Invalid phone format")
+    @Pattern(regexp = "^\\d{2}\\d{8,9}$", message = "Invalid phone format")
     private String cellPhone;
 
     @Email(message = "Invalid email format")
