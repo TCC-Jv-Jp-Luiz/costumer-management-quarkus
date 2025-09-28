@@ -1,0 +1,14 @@
+---
+app_user: quarkus
+quarkus_app_dir: /opt/quarkus-app
+
+java_version: 21
+
+docker_apt_key_url: https://download.docker.com/linux/ubuntu/gpg
+docker_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+compose_version: "v2.23.0"
+
+quarkus_repo_url: git@github.com:TCC-Jv-Jp-Luiz/costumer-management-quarkus.git
+quarkus_repo_version: main
+
+ssh_private_key_path: /home/joao/.ssh/id_rsa

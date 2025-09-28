@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:17.4
@@ -17,6 +15,8 @@ services:
   app:
     image: quarkus-app:latest
     container_name: quarkus_app
+    ports:
+      - "8080:8080"
     depends_on:
       - db
     environment:

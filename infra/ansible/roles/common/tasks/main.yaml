@@ -1,0 +1,16 @@
+- name: Update APT package cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Install basic dependencies
+  apt:
+    name:
+      - git
+      - unzip
+      - wget
+      - curl
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    state: present

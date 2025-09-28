@@ -1,0 +1,11 @@
+- name: Install OpenJDK
+  apt:
+    name: openjdk-{{ java_version }}-jdk
+    state: present
+
+- name: Set JAVA_HOME
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    regexp: '^JAVA_HOME='
+    line: 'JAVA_HOME=/usr/lib/jvm/java-{{ java_version }}-openjdk-amd64'
+    state: present

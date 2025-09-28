@@ -1,0 +1,24 @@
+---
+
+- name: Clone Quarkus repository
+  git:
+    repo: "{{ quarkus_repo_url }}"
+    dest: "{{ quarkus_app_dir }}"
+    version: "{{ quarkus_repo_version | default('main') }}"
+    accept_hostkey: yes
+    key_file: "{{ ssh_private_key_path }}"
+
+- name: Build Quarkus project
+  shell: ./mvnw clean install
+  args:
+    chdir: "{{ quarkus_app_dir }}/customer-management/"
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-{{ java_version }}-openjdk-amd64
+    MAVEN_OPTS: -Xmx1024m
+  register: build_result
+  changed_when: "'BUILD SUCCESS' in build_result.stdout"
+
+- name: Start containers with Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ quarkus_app_dir }}"
+    state: present

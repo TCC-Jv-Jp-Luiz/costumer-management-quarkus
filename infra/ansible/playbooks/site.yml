@@ -1,0 +1,12 @@
+---
+- name: Deploy Quarkus application stack
+  hosts: quarkus
+  become: true
+  vars_files:
+    - ../vars/main.yml
+
+  roles:
+    - common
+    - java
+    - docker
+    - quarkus

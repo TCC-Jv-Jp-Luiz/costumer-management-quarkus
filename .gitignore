@@ -96,3 +96,30 @@ nb-configuration.xml
 .mvn/.develocity
 .mvn/.gradle-enterprise/
 .quarkus
+
+# Arquivos do Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+terraform.tfstate.lock.info
+.terraform.lock.hcl
+
+# Arquivos de override
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Arquivos de variáveis sensíveis
+**/secrets.auto.tfvars
+**/secrets.tfvars
+
+# Arquivos de módulos baixados
+**/.terraform_modules
+
+# Arquivos de plano do Terraform
+*.tfplan
+
+keys.json
