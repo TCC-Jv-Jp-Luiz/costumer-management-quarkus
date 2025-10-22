@@ -28,7 +28,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Build and run tests with Maven
-        run: mvn -B package --file pom.xml
+        working-directory: ./customer-management
+        run: mvn -B package
 
   build_and_push_image:
     name: Build and Push Docker Image
@@ -60,8 +61,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./src/main/docker/Dockerfile.jvm
+          context: ./customer-management
+          file: ./customer-management/src/main/docker/Dockerfile.jvm
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.sha_tag }}
