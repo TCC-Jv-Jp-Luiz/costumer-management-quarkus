@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: quarkus
-          image: jotaven/customer-management-quarkus:1.5
+          image: jotaven/customer-management-quarkus:latest
           ports:
             - containerPort: 8080
           resources:

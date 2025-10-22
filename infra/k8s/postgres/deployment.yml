@@ -12,6 +12,14 @@ spec:
       labels:
         app: postgres
     spec:
+      initContainers:
+        - name: fix-pg-permissions
+          image: busybox
+          command: ['sh', '-c', 'chown -R 999:999 /var/lib/postgresql/data']
+          volumeMounts:
+          - name: postgres-storage
+            mountPath: /var/lib/postgresql/data
+            subPath: postgres-data
       containers:
         - name: postgres
           image: postgres:17.4 
@@ -40,6 +48,7 @@ spec:
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+              subPath: postgres-data
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
