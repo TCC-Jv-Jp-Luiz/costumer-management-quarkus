@@ -9,6 +9,9 @@ on:
 jobs:
   call_build_and_push:
     name: Build and Push
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/build-push.yml
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
