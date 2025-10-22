@@ -2,6 +2,8 @@ name: CI/CD Orchestrator for Quarkus Application
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
