@@ -11,6 +11,13 @@ data:
     server {
         listen 80;
 
+        # NOVO BLOCO: Health check para o GKE
+        location /nginx_health {
+            return 200 "OK";
+            add_header Content-Type text/plain;
+        }
+
+        # SEU BLOCO EXISTENTE:
         location / {
             proxy_pass http://quarkus_backend;
             proxy_set_header Host $host;

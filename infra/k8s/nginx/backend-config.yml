@@ -1,0 +1,9 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: nginx-backend-config # Dê um nome a ele
+spec:
+  healthCheck:
+    type: HTTP
+    requestPath: /nginx_health  # Diga para ele usar o novo caminho que criamos
+    port: 80                # Na porta do container do Nginx
