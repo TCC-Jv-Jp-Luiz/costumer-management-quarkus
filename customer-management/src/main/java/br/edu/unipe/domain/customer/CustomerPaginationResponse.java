@@ -3,7 +3,9 @@ package br.edu.unipe.domain.customer;
 import br.edu.unipe.domain.customer.dto.CustomerOutputDTO;
 
 import java.util.List;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class CustomerPaginationResponse {
     public int limit;
     public int offset;

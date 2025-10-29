@@ -4,7 +4,9 @@ import br.edu.unipe.domain.address.dto.AddressInputDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class CustomerInputDTO {
     @NotBlank(message = "Name is required")
     private String name;
