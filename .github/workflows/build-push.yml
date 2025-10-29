@@ -34,7 +34,7 @@ jobs:
           cache: 'maven'
       - name: Build and run tests with Maven
         working-directory: ./customer-management
-        run: mvn -B package
+        run: mvn -B package -Pnative
 
       - name: Generate image tags
         id: meta
@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./customer-management
-          file: ./customer-management/src/main/docker/Dockerfile.jvm
+          file: ./customer-management/src/main/docker/Dockerfile.native
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.sha_tag }}
