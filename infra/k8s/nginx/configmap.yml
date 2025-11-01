@@ -5,7 +5,7 @@ metadata:
 data:
   default.conf: |
     upstream quarkus_backend {
-        server customer-management-quarkus:80;
+        server customer-management-quarkus:8080;
     }
 
     server {
