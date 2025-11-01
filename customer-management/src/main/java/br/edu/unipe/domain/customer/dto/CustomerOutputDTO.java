@@ -8,6 +8,9 @@ import br.edu.unipe.domain.auditlogInfo.AuditLogInfo;
 import br.edu.unipe.domain.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class CustomerOutputDTO {
     public UUID id;
     public String name;

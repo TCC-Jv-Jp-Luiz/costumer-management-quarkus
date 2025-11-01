@@ -3,7 +3,9 @@ package br.edu.unipe.domain.address.dto;
 
 import br.edu.unipe.domain.address.Address;
 import br.edu.unipe.domain.address.State;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class AddressOutputDTO {
     private String street;
     private String complement;

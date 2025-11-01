@@ -1,0 +1,23 @@
+name: CI/CD Orchestrator for Quarkus Application
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  call_build_and_push:
+    name: Build and Push
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/build-push.yml
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+# TODO: Finalizar a chamada do workflow de deploy
+#  call_deploy:
+
+    

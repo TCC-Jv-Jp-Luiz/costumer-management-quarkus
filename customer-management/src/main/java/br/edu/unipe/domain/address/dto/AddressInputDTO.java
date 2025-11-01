@@ -3,7 +3,9 @@ package br.edu.unipe.domain.address.dto;
 import br.edu.unipe.domain.address.State;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class AddressInputDTO {
     @NotBlank(message = "Street is required")
     private String street;
