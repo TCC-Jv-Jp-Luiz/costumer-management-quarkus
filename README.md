@@ -1,4 +1,4 @@
-# 📘 API de Gerenciamento de Pessoas — Quarkus
+# 📘 API de Gerenciamento de Clientes — Quarkus
 
 Este repositório contém a implementação da API de Gerenciamento de Pessoas desenvolvida em **Quarkus 3.22.3**, utilizada no Trabalho de Conclusão de Curso *“Análise Comparativa de Desempenho entre Frameworks Java para APIs: Spring Boot vs. Quarkus”*.
 
